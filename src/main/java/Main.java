@@ -1,10 +1,17 @@
+import com.google.gson.Gson;
+
 import java.io.File;
-import java.util.Arrays;
 
 public class Main {
+
+    public static final int PORT = 8989;
+
     public static void main(String[] args) throws Exception {
-        BooleanSearchEngine engine = new BooleanSearchEngine(new File("pdfs"));
-        System.out.println(engine.search("бизнес"));
+
+        SearchEngine engine = new BooleanSearchEngine(new File("pdfs"));
+        Gson gson = new Gson();
+        Server server = new Server(engine, gson);
+        server.start();
 
         // здесь создайте сервер, который отвечал бы на нужные запросы
         // слушать он должен порт 8989
