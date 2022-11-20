@@ -10,7 +10,9 @@ public class Main {
 
         SearchEngine engine = new BooleanSearchEngine(new File("pdfs"));
         Gson gson = new Gson();
-        Server server = new Server(engine, gson);
+        StopWordService stopWordService = new StopWordService();
+        ProcessWordService processWordService = new ProcessWordService(engine, stopWordService);
+        Server server = new Server(gson, processWordService);
         server.start();
 
         // здесь создайте сервер, который отвечал бы на нужные запросы

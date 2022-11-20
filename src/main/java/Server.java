@@ -12,13 +12,14 @@ public class Server {
 
     public static final int PORT = 8989;
 
-    private final SearchEngine engine;
-
     private final Gson gson;
 
-    public Server(SearchEngine engine, Gson gson) {
-        this.engine = engine;
+    private final ProcessWordService processWordService;
+
+    public Server(Gson gson,
+                  ProcessWordService processWordService) {
         this.gson = gson;
+        this.processWordService = processWordService;
     }
 
     public void start() {
@@ -29,9 +30,9 @@ public class Server {
                 try (Socket socket = serverSocket.accept();
                      BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                      PrintWriter out = new PrintWriter(socket.getOutputStream())) {
-                    String word = in.readLine();
+                    String words = in.readLine();
                     System.out.println("Searching is starting...");
-                    List<PageEntry> result = engine.search(word);
+                    List<PageEntry> result = processWordService.processing(words);
                     String json = gson.toJson(result);
                     System.out.println("The count of results: " + (result == null ? 0 : result.size()));
                     out.println(json);
